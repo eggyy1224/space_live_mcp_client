@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "space_live": {
+      "command": "/Volumes/2024data/space_live_project/prototype/backend/venv/bin/python",
+      "args": [
+        "/Volumes/2024data/space_live_project/prototype/backend/mcp_server/main.py"
+      ],
+      "env": {}
+    }
+  },
+  "theme": "Default",
+  "telemetry": {
+    "enabled": true,
+    "target": "local",
+    "otlpEndpoint": "http://localhost:4317",
+    "logPrompts": true
+  },
+  "sandbox": false
+}
