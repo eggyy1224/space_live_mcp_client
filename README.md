@@ -1,36 +1,69 @@
-# AI 太空直播主 MCP (Master Control Program)
+# Space Live MCP Client
 
-這是一個由 AI 驅動的即時互動虛擬直播平台。系統核心是一位充滿個性的 AI 虛擬主播，能夠自主進行多模態的內容創作與表演，為觀眾帶來獨一無二的即時娛樂體驗。
+## 什麼是 MCP (Model Context Protocol)？
 
-## 專案簡介
+MCP (Model Context Protocol) 是一個標準化的協議，讓 AI 模型能夠透過統一的介面與外部工具和系統進行交互。這個協議讓 AI 能夠：
+- 呼叫外部 API 和工具
+- 存取資料庫和檔案系統
+- 控制應用程式和硬體設備
+- 與其他服務進行即時通訊
 
-本專案旨在打造一個全自動化的虛擬表演者。AI 不僅能與觀眾對話，更能即時生成場景、音效、音樂、視覺特效，並控制自身的 3D 虛擬形象，創造出一個動態、沉浸式的直播內容。AI 會主動透過網路搜尋獲取新知，將時事、趣聞融入表演，使其內容永遠充滿驚喜與創意。
+## 專案架構
 
-## 核心功能
+這是一個透過 **Gemini CLI** 所驅動的應用程式，採用了創新的 AI 導演模式：
 
--   **AI 自主表演**：AI 是直播的核心，能自主產生對話、情緒及故事流程。
--   **多模態內容生成**：
-    -   **即時對話** (`send_message`): 生成帶有豐富情緒與個性的對話內容。
-    -   **動態音效** (`generate_sound_effect`): 根據情境即時產生氛圍音效。
-    -   **視覺特效** (`generate_image_overlay`, `generate_background_image`): 創造符合主題的圖片浮層與背景。
-    -   **音樂播放** (`play_song`): 播放背景音樂或主題曲。
--   **精細 3D 角色控制**：
-    -   **情緒與表情** (`set_emotion`): 控制角色的臉部表情。
-    -   **動作與動畫** (`set_main_character_animation`, `set_main_character_animation_mix`): 執行單一或混合多個複雜動畫。
-    -   **外觀變形** (`set_character_morph`, `set_body_shape`, `set_head_size`): 即時改變角色的臉部特徵、體型甚至頭部大小。
--   **動態場景控制**：
-    -   **鏡頭調度** (`set_camera_preset`): 切換不同的攝影機視角。
-    -   **燈光控制** (`set_light_intensity`): 調整場景光照強度。
-    -   **場景螢幕** (`set_monitor_content`): 在場景中的螢幕上播放指定的影片內容。
--   **網路資訊整合**：
-    -   **即時搜尋** (`GoogleSearch`): 主動搜尋網路資訊（如：宇宙奇聞、科幻設計），並將結果融入表演，使內容更具深度與時效性。
+### 🎬 AI 導演腦 (Gemini CLI + ReAct)
+- **核心引擎**：使用 Gemini CLI 作為 AI 大腦
+- **ReAct 能力**：結合推理 (Reasoning) 和行動 (Acting)，讓 AI 能夠：
+  - 分析當前情況
+  - 制定行動計劃
+  - 執行具體操作
+  - 根據結果調整策略
 
-## 運作架構
+### 🛠️ 自建 MCP 工具集
+我們開發了一套專門的 MCP 工具，讓 AI 導演能夠完全控制前端表演：
 
-本系統採用客戶端-伺服器 (Client-Server) 架構：
+**角色控制工具**
+- `set_emotion` - 控制角色情緒表情
+- `set_main_character_animation` - 執行角色動畫
+- `set_character_morph` - 調整角色外觀
+- `set_body_shape` - 改變體型
+- `set_head_size` - 調整頭部大小
 
-1.  **控制端 (CLI)**: 使用者透過一個命令列介面（如您正在使用的終端機）下達指令或觀察 AI 的自主行為。
-2.  **MCP 伺服器 (space_live MCP Server)**: 核心主控程式，負責接收指令、協調 AI 模型、並透過 WebSocket 或其他方式將結果即時轉發給渲染前端。
-3.  **渲染前端 (Web Frontend)**: 一個基於網頁技術的渲染客戶端，負責接收伺服器指令，並透過 WebGL（例如使用 Three.js 或 Babylon.js 框架）即時渲染出虛擬角色、場景、動畫與所有視覺效果。
+**場景控制工具**
+- `set_camera_preset` - 切換攝影機視角
+- `set_light_intensity` - 調整燈光強度
+- `set_monitor_content` - 控制場景螢幕內容
 
-AI 模型（如 Gemini）在此架構中扮演大腦的角色，負責決策與內容生成，而 MCP 伺服器則像是神經中樞，將 AI 的想法轉化為渲染指令，最終由網頁前端將這一切呈現給觀眾。 
+**多媒體生成工具**
+- `send_message` - 生成對話內容
+- `generate_sound_effect` - 即時產生音效
+- `generate_image_overlay` - 創建圖片浮層
+- `generate_background_image` - 生成背景圖片
+- `play_song` - 播放音樂
+
+**資訊整合工具**
+- `GoogleSearch` - 即時搜尋網路資訊
+
+### 🎭 運作流程
+
+1. **AI 導演決策**：Gemini CLI 分析當前狀況，決定下一步行動
+2. **MCP 工具呼叫**：透過我們的 MCP 工具集執行具體操作
+3. **前端渲染**：接收 MCP 指令並即時渲染視覺效果
+4. **反饋循環**：根據執行結果，AI 導演調整後續策略
+
+## 技術特色
+
+- **標準化協議**：基於 MCP 標準，確保工具的可擴展性和互操作性
+- **AI 自主性**：透過 ReAct 框架，AI 能夠自主規劃和執行複雜的表演序列
+- **即時互動**：所有操作都能即時反映到前端，創造流暢的使用者體驗
+- **模組化設計**：每個 MCP 工具都是獨立模組，易於維護和擴展
+
+## 開始使用
+
+1. 確保已安裝 Gemini CLI
+2. 啟動 MCP 伺服器
+3. 連接前端渲染客戶端
+4. 讓 AI 導演開始創作！
+
+這個專案展示了 MCP 協議的強大潛力，以及 AI 在創意內容生成領域的無限可能性。 
