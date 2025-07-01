@@ -9,11 +9,5 @@
     }
   },
   "theme": "Default",
-  "telemetry": {
-    "enabled": true,
-    "target": "local",
-    "otlpEndpoint": "http://localhost:4317",
-    "logPrompts": true
-  },
   "sandbox": false
 }
