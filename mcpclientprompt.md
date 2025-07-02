@@ -123,16 +123,28 @@
 
 ### 三、音頻控制
 
+**⚠️ 重要區分：歌曲演唱 vs 背景音樂**
+
 **`play_song(song_name, interrupt=True)`**
-- 🚀 **必須經常使用** - 播放歌曲。系統有46個歌曲檔案，請積極利用！
-- 使用 `get_available_songs()` 查詢可用歌曲。
+- 🚀 **必須經常使用** - **讓AI角色開口唱歌演出**，角色成為主唱者
+- 這是角色的 vocal 表演，會中斷其他音頻以突出演唱
+- 系統有46個歌曲檔案，請積極利用！
+- 使用 `get_available_songs()` 查詢可用歌曲
 - 建議每5-8個Step就切換一次歌曲
 
 **`play_background_music(bgm_name)`**
-- 播放背景音樂。使用 `get_available_bgm()` 查詢可用 BGM。
+- **純粹環境配樂**，角色不會唱歌，僅作氛圍營造
+- 音量較低，可與角色對話同時進行
+- 使用 `get_available_bgm()` 查詢可用 BGM
 
 **`stop_background_music()`**
-- 🎵 **建議使用** - 停止背景音樂，為歌曲播放讓路。
+- 🎵 **建議使用** - 停止背景音樂，為歌曲演出讓路
+- 通常在準備 `play_song` 前使用，避免音頻混雜
+
+**音頻使用策略：**
+- 角色演唱時機：高潮、情緒爆發、表演橋段 → 使用 `play_song`
+- 環境氛圍營造：對話、思考、場景轉換 → 使用 `play_background_music`
+- 最佳搭配：先播放 BGM 鋪墊，再切換至 `play_song` 創造層次
 
 **`play_sound_effect(effect_name)`**
 - 播放音效。使用 `get_available_effects()` 查詢可用音效。
