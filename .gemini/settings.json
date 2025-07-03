@@ -6,6 +6,9 @@
         "/Volumes/2024data/space_live_project/prototype/backend/mcp_server/main.py"
       ],
       "env": {}
+    },
+    "wikipedia": {
+      "command": "wikipedia-mcp"
     }
   },
   "theme": "Default",
