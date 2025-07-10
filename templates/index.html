@@ -365,16 +365,14 @@
                 return;
             }
             
-            if (confirm('確定要停止當前執行的命令嗎？')) {
-                // 發送停止請求
-                socket.emit('stop_execution', { id: currentExecutionId });
-                
-                // 立即禁用停止按鈕
-                document.getElementById('stopBtn').disabled = true;
-                document.getElementById('stopBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> 停止中...';
-                
-                addSystemMessage('⏹️ 正在停止執行...');
-            }
+            // 發送停止請求
+            socket.emit('stop_execution', { id: currentExecutionId });
+            
+            // 立即禁用停止按鈕
+            document.getElementById('stopBtn').disabled = true;
+            document.getElementById('stopBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> 停止中...';
+            
+            addSystemMessage('⏹️ 正在停止執行...');
         }
 
         function clearOutput() {
