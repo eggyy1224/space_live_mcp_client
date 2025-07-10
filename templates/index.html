@@ -3,114 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Space Live MCP Test - Web Interface</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>SPACE-LIVE Terminal</title>
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #0a0a0a;
             min-height: 100vh;
-            color: white;
+            color: #00ff00;
+            font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+            margin: 0;
+            padding: 0;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
+            padding: 20px;
         }
-        .card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
+        .terminal-container {
+            background: #000000;
+            border: 2px solid #333333;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            letter-spacing: 4px;
         }
         .output-container {
-            background: #1e1e1e;
-            color: #fff;
-            border-radius: 10px;
-            max-height: 600px;
+            background: #000000;
+            color: #00ff00;
+            border: 1px solid #333333;
+            border-radius: 4px;
+            max-height: 500px;
             overflow-y: auto;
             font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
+            font-size: 13px;
+            line-height: 1.4;
+            padding: 10px;
         }
         .output-line {
-            padding: 2px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .output-line:last-child {
-            border-bottom: none;
+            padding: 1px 0;
+            word-wrap: break-word;
         }
         .output-line.stdout {
-            color: #4CAF50;
+            color: #00ff00;
         }
         .output-line.stderr {
-            color: #f44336;
+            color: #ff6b6b;
         }
         .output-line.system {
-            color: #2196F3;
+            color: #61dafb;
         }
         .status-badge {
             display: inline-block;
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
             font-weight: bold;
+            font-family: 'Courier New', monospace;
         }
         .status-running {
-            background: #ff9800;
-            color: white;
+            background: #333333;
+            color: #ffd700;
+            border: 1px solid #ffd700;
         }
         .status-completed {
-            background: #4CAF50;
-            color: white;
+            background: #333333;
+            color: #00ff00;
+            border: 1px solid #00ff00;
         }
         .status-error {
-            background: #f44336;
-            color: white;
+            background: #333333;
+            color: #ff6b6b;
+            border: 1px solid #ff6b6b;
         }
-        .input-group {
+        .input-section {
             margin-bottom: 20px;
         }
-        .btn-primary {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border: none;
-            border-radius: 25px;
-            padding: 10px 30px;
+        .input-label {
+            color: #00ff00;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: bold;
         }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .form-control {
+            background: #000000;
+            border: 1px solid #333333;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 3px;
+            flex: 1;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #00ff00;
+            box-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+        }
+        .form-control::placeholder {
+            color: #666666;
+        }
+        .btn {
+            background: #000000;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            padding: 8px 16px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn:hover {
+            background: #00ff00;
+            color: #000000;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         .btn-danger {
-            border-radius: 25px;
-            padding: 10px 30px;
+            border-color: #ff6b6b;
+            color: #ff6b6b;
         }
         .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: #ff6b6b;
+            color: #000000;
         }
         .connection-status {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
             z-index: 1000;
-        }
-        .title {
-            text-align: center;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
         }
         .execution-info {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
+            background: #111111;
+            border: 1px solid #333333;
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 15px;
             display: none;
+            font-size: 12px;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 12px;
+        }
+        .controls button, .controls a {
+            background: #000000;
+            color: #666666;
+            border: 1px solid #333333;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+        }
+        .controls button:hover, .controls a:hover {
+            color: #00ff00;
+            border-color: #00ff00;
         }
         .spinner {
             display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid transparent;
-            border-top: 2px solid #fff;
+            width: 12px;
+            height: 12px;
+            border: 1px solid transparent;
+            border-top: 1px solid #ffd700;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -118,83 +190,81 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .terminal-prompt {
+            color: #666666;
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="connection-status">
-        <span id="connection-status" class="badge bg-secondary">
-            <i class="fas fa-circle"></i> 連接中...
+        <span id="connection-status">
+            [連接中...]
         </span>
     </div>
 
-    <div class="container mt-5">
-        <div class="title">
-            <h1><i class="fas fa-rocket"></i> Space Live MCP Test</h1>
-            <p class="lead">Gemini CLI Web Interface</p>
-        </div>
+    <div class="container">
+        <div class="terminal-container">
+            <div class="logo">
+                S P A C E - L I V E
+            </div>
 
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h5 class="card-title">
-                            <i class="fas fa-terminal"></i> 命令輸入
-                        </h5>
-                        
-                        <div class="input-group">
-                            <input type="text" id="userInput" class="form-control" 
-                                   placeholder="輸入您的指令..." 
-                                   onkeypress="handleKeyPress(event)">
-                            <button class="btn btn-primary" id="executeBtn" onclick="executeCommand()">
-                                <i class="fas fa-play"></i> 執行
-                            </button>
-                            <button class="btn btn-danger" id="stopBtn" onclick="stopExecution()" style="display: none;">
-                                <i class="fas fa-stop"></i> 停止
-                            </button>
-                        </div>
+            <div class="input-section">
+                <div class="input-label">
+                    <span class="terminal-prompt">></span> 你想看什麼即時節目？
+                </div>
+                
+                <div class="input-group">
+                    <input type="text" id="userInput" class="form-control" 
+                           placeholder="描述你想看的表演內容..." 
+                           onkeypress="handleKeyPress(event)">
+                    <button class="btn" id="executeBtn" onclick="executeCommand()">
+                        ▶ RUN
+                    </button>
+                    <button class="btn btn-danger" id="stopBtn" onclick="stopExecution()" style="display: none;">
+                        ■ STOP
+                    </button>
+                </div>
 
-                        <div id="executionInfo" class="execution-info">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span id="executionStatus" class="status-badge status-running">
-                                    <span class="spinner"></span> 執行中...
-                                </span>
-                                <small id="executionTime" class="text-muted"></small>
-                            </div>
-                            <div class="mt-2">
-                                <strong>輸入:</strong> <span id="executionInput"></span>
-                            </div>
-                            <div class="mt-1">
-                                <strong>命令:</strong> <span id="executionCommand"></span>
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-between">
-                            <button class="btn btn-outline-light btn-sm" onclick="clearOutput()">
-                                <i class="fas fa-trash"></i> 清除輸出
-                            </button>
-                            <a href="/history" class="btn btn-outline-light btn-sm">
-                                <i class="fas fa-history"></i> 執行歷史
-                            </a>
-                        </div>
+                <div id="executionInfo" class="execution-info">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span id="executionStatus" class="status-badge status-running">
+                            <span class="spinner"></span> RUNNING...
+                        </span>
+                        <span id="executionTime" style="color: #666666; font-size: 11px;"></span>
                     </div>
-
-                    <div class="col-md-6">
-                        <h5 class="card-title">
-                            <i class="fas fa-desktop"></i> 即時輸出
-                        </h5>
-                        
-                        <div id="outputContainer" class="output-container p-3">
-                            <div class="output-line system">
-                                <i class="fas fa-info-circle"></i> 等待指令輸入...
-                            </div>
-                        </div>
+                    <div style="margin-top: 8px;">
+                        <strong>INPUT:</strong> <span id="executionInput"></span>
+                    </div>
+                    <div style="margin-top: 4px;">
+                        <strong>CMD:</strong> <span id="executionCommand"></span>
                     </div>
                 </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <div style="color: #666666; font-size: 12px; margin-bottom: 5px;">
+                    [ LIVE OUTPUT ]
+                </div>
+                
+                <div id="outputContainer" class="output-container">
+                    <div class="output-line system">
+                        > 系統待命中，等待節目指令...
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button onclick="clearOutput()">
+                    [CLEAR]
+                </button>
+                <a href="/history">
+                    [HISTORY]
+                </a>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <script>
         // WebSocket 連接
@@ -205,17 +275,17 @@
 
         // 連接狀態管理
         socket.on('connect', function() {
-            updateConnectionStatus('connected', 'bg-success');
-            addSystemMessage('WebSocket 連接成功');
+            updateConnectionStatus('[CONNECTED]');
+            addSystemMessage('> 終端連接成功');
         });
 
         socket.on('disconnect', function() {
-            updateConnectionStatus('連接中斷', 'bg-danger');
-            addSystemMessage('WebSocket 連接中斷');
+            updateConnectionStatus('[DISCONNECTED]');
+            addSystemMessage('> 終端連接中斷');
         });
 
         socket.on('connected', function(data) {
-            addSystemMessage(data.message);
+            addSystemMessage('> ' + data.message);
         });
 
         // 執行相關事件
@@ -236,13 +306,13 @@
             
             // 清除之前的輸出
             clearOutput();
-            addSystemMessage(`🚀 開始執行 (ID: ${data.id})`);
+            addSystemMessage(`> STARTING EXECUTION [ID:${data.id}]`);
         });
 
         socket.on('execution_progress', function(data) {
             if (data.id === currentExecutionId) {
                 document.getElementById('executionCommand').textContent = data.message;
-                addSystemMessage(data.message);
+                addSystemMessage(`> ${data.message}`);
             }
         });
 
@@ -260,12 +330,12 @@
                 const statusEl = document.getElementById('executionStatus');
                 if (data.success) {
                     statusEl.className = 'status-badge status-completed';
-                    statusEl.innerHTML = '<i class="fas fa-check"></i> 完成';
-                    addSystemMessage(`✅ 執行完成 (返回碼: ${data.return_code})`);
+                    statusEl.innerHTML = 'COMPLETED';
+                    addSystemMessage(`> EXECUTION COMPLETED [CODE:${data.return_code}]`);
                 } else {
                     statusEl.className = 'status-badge status-error';
-                    statusEl.innerHTML = '<i class="fas fa-times"></i> 失敗';
-                    addSystemMessage(`❌ 執行失敗 (返回碼: ${data.return_code})`);
+                    statusEl.innerHTML = 'FAILED';
+                    addSystemMessage(`> EXECUTION FAILED [CODE:${data.return_code}]`);
                 }
                 
                 // 重新啟用執行按鈕，隱藏停止按鈕
@@ -281,9 +351,9 @@
                 
                 // 更新狀態
                 document.getElementById('executionStatus').className = 'status-badge status-error';
-                document.getElementById('executionStatus').innerHTML = '<i class="fas fa-times"></i> 錯誤';
+                document.getElementById('executionStatus').innerHTML = 'ERROR';
                 
-                addSystemMessage(`❌ ${data.error}`);
+                addSystemMessage(`> ERROR: ${data.error}`);
                 
                 // 重新啟用執行按鈕，隱藏停止按鈕
                 document.getElementById('executeBtn').disabled = false;
@@ -293,7 +363,7 @@
         });
 
         socket.on('error', function(data) {
-            addSystemMessage(`❌ 錯誤: ${data.message}`);
+            addSystemMessage(`> ERROR: ${data.message}`);
         });
 
         socket.on('execution_stopped', function(data) {
@@ -302,31 +372,30 @@
                 
                 // 更新狀態
                 document.getElementById('executionStatus').className = 'status-badge status-error';
-                document.getElementById('executionStatus').innerHTML = '<i class="fas fa-stop-circle"></i> 已停止';
+                document.getElementById('executionStatus').innerHTML = 'STOPPED';
                 
-                addSystemMessage(`⏹️ ${data.message}`);
+                addSystemMessage(`> ${data.message.toUpperCase()}`);
                 
                 // 重新啟用執行按鈕，隱藏停止按鈕，恢復停止按鈕狀態
                 document.getElementById('executeBtn').disabled = false;
                 document.getElementById('stopBtn').disabled = false;
-                document.getElementById('stopBtn').innerHTML = '<i class="fas fa-stop"></i> 停止';
+                document.getElementById('stopBtn').innerHTML = '■ STOP';
                 document.getElementById('stopBtn').style.display = 'none';
                 currentExecutionId = null;
             }
         });
 
         // UI 功能函數
-        function updateConnectionStatus(text, className) {
+        function updateConnectionStatus(text) {
             const statusEl = document.getElementById('connection-status');
             statusEl.textContent = text;
-            statusEl.className = `badge ${className}`;
         }
 
         function addSystemMessage(message) {
             const container = document.getElementById('outputContainer');
             const line = document.createElement('div');
             line.className = 'output-line system';
-            line.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
+            line.textContent = message;
             container.appendChild(line);
             container.scrollTop = container.scrollHeight;
         }
@@ -343,12 +412,12 @@
         function executeCommand() {
             const input = document.getElementById('userInput').value.trim();
             if (!input) {
-                alert('請輸入指令');
+                addSystemMessage('> ERROR: NO INPUT PROVIDED');
                 return;
             }
             
             if (isExecuting) {
-                alert('系統正在執行中，請稍等...');
+                addSystemMessage('> SYSTEM BUSY - PLEASE WAIT');
                 return;
             }
             
@@ -361,7 +430,7 @@
 
         function stopExecution() {
             if (!isExecuting || !currentExecutionId) {
-                alert('目前沒有正在執行的命令');
+                addSystemMessage('> NO ACTIVE EXECUTION TO STOP');
                 return;
             }
             
@@ -370,14 +439,14 @@
             
             // 立即禁用停止按鈕
             document.getElementById('stopBtn').disabled = true;
-            document.getElementById('stopBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> 停止中...';
+            document.getElementById('stopBtn').innerHTML = '<span class="spinner"></span> STOPPING...';
             
-            addSystemMessage('⏹️ 正在停止執行...');
+            addSystemMessage('> TERMINATING EXECUTION...');
         }
 
         function clearOutput() {
             const container = document.getElementById('outputContainer');
-            container.innerHTML = '<div class="output-line system"><i class="fas fa-info-circle"></i> 輸出已清除</div>';
+            container.innerHTML = '<div class="output-line system">> OUTPUT CLEARED</div>';
         }
 
         function handleKeyPress(event) {
