@@ -79,6 +79,14 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
+        .btn-danger {
+            border-radius: 25px;
+            padding: 10px 30px;
+        }
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
         .connection-status {
             position: fixed;
             top: 20px;
@@ -139,6 +147,9 @@
                                    onkeypress="handleKeyPress(event)">
                             <button class="btn btn-primary" id="executeBtn" onclick="executeCommand()">
                                 <i class="fas fa-play"></i> 執行
+                            </button>
+                            <button class="btn btn-danger" id="stopBtn" onclick="stopExecution()" style="display: none;">
+                                <i class="fas fa-stop"></i> 停止
                             </button>
                         </div>
 
@@ -219,8 +230,9 @@
             document.getElementById('executionStatus').className = 'status-badge status-running';
             document.getElementById('executionStatus').innerHTML = '<span class="spinner"></span> 執行中...';
             
-            // 禁用執行按鈕
+            // 禁用執行按鈕，顯示停止按鈕
             document.getElementById('executeBtn').disabled = true;
+            document.getElementById('stopBtn').style.display = 'inline-block';
             
             // 清除之前的輸出
             clearOutput();
@@ -256,8 +268,9 @@
                     addSystemMessage(`❌ 執行失敗 (返回碼: ${data.return_code})`);
                 }
                 
-                // 重新啟用執行按鈕
+                // 重新啟用執行按鈕，隱藏停止按鈕
                 document.getElementById('executeBtn').disabled = false;
+                document.getElementById('stopBtn').style.display = 'none';
                 currentExecutionId = null;
             }
         });
@@ -272,14 +285,34 @@
                 
                 addSystemMessage(`❌ ${data.error}`);
                 
-                // 重新啟用執行按鈕
+                // 重新啟用執行按鈕，隱藏停止按鈕
                 document.getElementById('executeBtn').disabled = false;
+                document.getElementById('stopBtn').style.display = 'none';
                 currentExecutionId = null;
             }
         });
 
         socket.on('error', function(data) {
             addSystemMessage(`❌ 錯誤: ${data.message}`);
+        });
+
+        socket.on('execution_stopped', function(data) {
+            if (data.id === currentExecutionId) {
+                isExecuting = false;
+                
+                // 更新狀態
+                document.getElementById('executionStatus').className = 'status-badge status-error';
+                document.getElementById('executionStatus').innerHTML = '<i class="fas fa-stop-circle"></i> 已停止';
+                
+                addSystemMessage(`⏹️ ${data.message}`);
+                
+                // 重新啟用執行按鈕，隱藏停止按鈕，恢復停止按鈕狀態
+                document.getElementById('executeBtn').disabled = false;
+                document.getElementById('stopBtn').disabled = false;
+                document.getElementById('stopBtn').innerHTML = '<i class="fas fa-stop"></i> 停止';
+                document.getElementById('stopBtn').style.display = 'none';
+                currentExecutionId = null;
+            }
         });
 
         // UI 功能函數
@@ -324,6 +357,24 @@
             
             // 清空輸入框
             document.getElementById('userInput').value = '';
+        }
+
+        function stopExecution() {
+            if (!isExecuting || !currentExecutionId) {
+                alert('目前沒有正在執行的命令');
+                return;
+            }
+            
+            if (confirm('確定要停止當前執行的命令嗎？')) {
+                // 發送停止請求
+                socket.emit('stop_execution', { id: currentExecutionId });
+                
+                // 立即禁用停止按鈕
+                document.getElementById('stopBtn').disabled = true;
+                document.getElementById('stopBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> 停止中...';
+                
+                addSystemMessage('⏹️ 正在停止執行...');
+            }
         }
 
         function clearOutput() {
