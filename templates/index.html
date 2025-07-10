@@ -194,6 +194,51 @@
             color: #666666;
             margin-right: 5px;
         }
+        
+        /* 預設選項下拉選單樣式 */
+        .input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+        
+        .preset-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #000000;
+            border: 1px solid #00ff00;
+            border-top: none;
+            border-radius: 0 0 3px 3px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .preset-option {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #333333;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            transition: background-color 0.2s;
+        }
+        
+        .preset-option:hover {
+            background: #1a1a1a;
+            color: #00ffff;
+        }
+        
+        .preset-option:last-child {
+            border-bottom: none;
+        }
+        
+        /* 當輸入框獲得焦點時的樣式 */
+        .form-control:focus + .preset-dropdown {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -215,9 +260,35 @@
                 </div>
                 
                 <div class="input-group">
-                    <input type="text" id="userInput" class="form-control" 
-                           placeholder="描述你想看的表演內容..." 
-                           onkeypress="handleKeyPress(event)">
+                    <div class="input-wrapper">
+                        <input type="text" id="userInput" class="form-control" 
+                               placeholder="描述你想看的表演內容..." 
+                               onkeypress="handleKeyPress(event)"
+                               onfocus="showPresetDropdown()"
+                               onblur="hidePresetDropdown()">
+                        <div id="presetDropdown" class="preset-dropdown">
+                            <div class="preset-option" onclick="selectPreset('太空瑜伽：漂浮式伸展操')">太空瑜伽：漂浮式伸展操</div>
+                            <div class="preset-option" onclick="selectPreset('太空媽祖：無重力遶境')">太空媽祖：無重力遶境</div>
+                            <div class="preset-option" onclick="selectPreset('新聞直播：銀河系吃瓜速報')">新聞直播：銀河系吃瓜速報</div>
+                            <div class="preset-option" onclick="selectPreset('夢境劇場：睡著也能看懂的表演')">夢境劇場：睡著也能看懂的表演</div>
+                            <div class="preset-option" onclick="selectPreset('科幻故事時間：外星阿嬤的深夜談話')">科幻故事時間：外星阿嬤的深夜談話</div>
+                            <div class="preset-option" onclick="selectPreset('星際大胃王：黑洞吸麵比賽')">星際大胃王：黑洞吸麵比賽</div>
+                            <div class="preset-option" onclick="selectPreset('太空好聲音：銀河KTV歡唱趴')">太空好聲音：銀河KTV歡唱趴</div>
+                            <div class="preset-option" onclick="selectPreset('宇宙釣蝦場：星雲裡的蝦子特別甜')">宇宙釣蝦場：星雲裡的蝦子特別甜</div>
+                            <div class="preset-option" onclick="selectPreset('星際算命攤：今晚會碰到哪顆流星？')">星際算命攤：今晚會碰到哪顆流星？</div>
+                            <div class="preset-option" onclick="selectPreset('宇宙寵物美容院：幫你的外星狗狗剪個帥氣髮型')">宇宙寵物美容院：幫你的外星狗狗剪個帥氣髮型</div>
+                            <div class="preset-option" onclick="selectPreset('飛碟二手拍賣：星際跳蚤市場大折扣')">飛碟二手拍賣：星際跳蚤市場大折扣</div>
+                            <div class="preset-option" onclick="selectPreset('外太空購物台：零重力炒鍋限量販售中')">外太空購物台：零重力炒鍋限量販售中</div>
+                            <div class="preset-option" onclick="selectPreset('宇宙占星熱線：你的戀愛運在仙女座')">宇宙占星熱線：你的戀愛運在仙女座</div>
+                            <div class="preset-option" onclick="selectPreset('太空相親大會：火星男女速配中')">太空相親大會：火星男女速配中</div>
+                            <div class="preset-option" onclick="selectPreset('宇宙泡茶閒聊室：黑洞烏龍茶免費招待')">宇宙泡茶閒聊室：黑洞烏龍茶免費招待</div>
+                            <div class="preset-option" onclick="selectPreset('星際交通報導：蟲洞塞車請改道')">星際交通報導：蟲洞塞車請改道</div>
+                            <div class="preset-option" onclick="selectPreset('宇宙深夜食堂：銀河燒烤限時特價')">宇宙深夜食堂：銀河燒烤限時特價</div>
+                            <div class="preset-option" onclick="selectPreset('外星電玩競技場：玩到地球毀滅也停不下來')">外星電玩競技場：玩到地球毀滅也停不下來</div>
+                            <div class="preset-option" onclick="selectPreset('太空脫口秀：今晚的主持人是機器人小明')">太空脫口秀：今晚的主持人是機器人小明</div>
+                            <div class="preset-option" onclick="selectPreset('星際卡拉OK包廂：地球人專屬優惠場')">星際卡拉OK包廂：地球人專屬優惠場</div>
+                        </div>
+                    </div>
                     <button class="btn" id="executeBtn" onclick="executeCommand()">
                         ▶ RUN
                     </button>
@@ -454,6 +525,58 @@
                 executeCommand();
             }
         }
+
+        // 預設選項下拉選單相關函數
+        let dropdownTimeout;
+        
+        function showPresetDropdown() {
+            // 清除隱藏的延時
+            if (dropdownTimeout) {
+                clearTimeout(dropdownTimeout);
+            }
+            
+            const dropdown = document.getElementById('presetDropdown');
+            dropdown.style.display = 'block';
+        }
+        
+        function hidePresetDropdown() {
+            // 延遲隱藏，讓用戶有時間點擊選項
+            dropdownTimeout = setTimeout(() => {
+                const dropdown = document.getElementById('presetDropdown');
+                dropdown.style.display = 'none';
+            }, 200);
+        }
+        
+        function selectPreset(value) {
+            // 清除隱藏的延時
+            if (dropdownTimeout) {
+                clearTimeout(dropdownTimeout);
+            }
+            
+            // 設置輸入框的值
+            const input = document.getElementById('userInput');
+            input.value = value;
+            
+            // 隱藏下拉選單
+            const dropdown = document.getElementById('presetDropdown');
+            dropdown.style.display = 'none';
+            
+            // 讓輸入框重新獲得焦點
+            input.focus();
+            
+            // 可選：添加系統訊息表示選擇了預設項目
+            addSystemMessage(`> PRESET SELECTED: ${value}`);
+        }
+        
+        // 點擊頁面其他地方時隱藏下拉選單
+        document.addEventListener('click', function(event) {
+            const inputWrapper = document.querySelector('.input-wrapper');
+            const dropdown = document.getElementById('presetDropdown');
+            
+            if (!inputWrapper.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
 
         // 頁面載入完成後聚焦輸入框
         window.addEventListener('load', function() {
