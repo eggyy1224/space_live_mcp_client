@@ -14,8 +14,9 @@
             padding: 0;
         }
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             padding: 20px;
+            margin: 0 auto;
         }
         .terminal-container {
             background: #000000;
@@ -94,6 +95,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 15px;
+            align-items: flex-start; /* 對齊項目 */
         }
         .form-control {
             background: #000000;
@@ -101,9 +103,10 @@
             color: #00ff00;
             font-family: 'Courier New', monospace;
             font-size: 14px;
-            padding: 8px 12px;
+            padding: 10px 15px;
             border-radius: 3px;
-            flex: 1;
+            width: 100%; /* 填滿父容器 */
+            box-sizing: border-box; /* 確保 padding 不會影響總寬度 */
         }
         .form-control:focus {
             outline: none;
@@ -198,7 +201,8 @@
         /* 預設選項下拉選單樣式 */
         .input-wrapper {
             position: relative;
-            flex: 1;
+            flex: 1; /* 佔用可用空間 */
+            min-width: 200px; /* 設定一個合理的最小寬度 */
         }
         
         .preset-dropdown {
